@@ -1,0 +1,16 @@
+{% extends "ElectronicsNetwork/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Создание нового товара{% endblock %}
+
+{% block content %}
+    <div class="container col-4">
+        <h2>Создание нового товара</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">Создать</button>
+        </form>
+    </div>
+{% endblock %}

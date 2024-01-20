@@ -1,0 +1,16 @@
+{% extends "ElectronicsNetwork/base.html" %}
+{% load static %}
+
+{% block title %}Удаление поставщика - SubscribeSync{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2>Удаление поставщика</h2>
+        <p>Вы уверены, что хотите удалить поставщика "{{ supplier.name }}"?</p>
+        <form method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Удалить</button>
+        </form>
+        <a href="{% url 'ElectronicsNetwork:suppliers' %}" class="btn btn-secondary">Отмена</a>
+    </div>
+{% endblock %}

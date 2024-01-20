@@ -1,0 +1,39 @@
+{% extends "ElectronicsNetwork/base.html" %}
+{% load static %}
+
+{% block title %}Подробная информация о поставщике - SubscribeSync{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2>{{ supplier.name }}</h2>
+        <p><strong>Тип:</strong> {{ supplier.get_type_display }}</p>
+        <p><strong>Email:</strong> {{ supplier.email }}</p>
+        <p><strong>Адрес:</strong> {{ supplier.city }}, {{ supplier.street }}, {{ supplier.house_number }}</p>
+        <p><strong>Задолженность:</strong> {{ supplier.debt_to_supplier|default:"0" }}</p>
+        <p><strong>Время создания:</strong> {{ supplier.creation_time }}</p>
+        {% if supplier.type != 'factory' %}
+            <p><strong>Поставщик:</strong> <a
+                    href="{% url 'ElectronicsNetwork:supplier_info' supplier.supplier.pk %}">{{ supplier.supplier.name|default:"0" }}</a>
+            </p>
+        {% endif %}
+        <h3 class="mt-4">Продукты, поставляемые поставщиком:</h3>
+        {% if supplier.products.all %}
+            <ul>
+                {% for product in supplier.products.all %}
+                    <li>{{ product.name }} (Модель: {{ product.model }}, Дата выпуска: {{ product.release_date }})</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Поставщик не предоставил информации о поставляемых продуктах.</p>
+        {% endif %}
+
+        {% if user.is_superuser %}
+            <a href="{% url 'ElectronicsNetwork:clear_debt' supplier.pk %}"
+               class="btn btn-outline-primary mt-3">Снять задолженность</a>
+            <a href="{% url 'ElectronicsNetwork:supplier_edit' supplier.id %}"
+               class="btn btn-warning mt-3">Изменить</a>
+            <a href="{% url 'ElectronicsNetwork:supplier_delete' supplier.id %}"
+               class="btn btn-danger mt-3">Удалить</a>
+        {% endif %}
+    </div>
+{% endblock %}

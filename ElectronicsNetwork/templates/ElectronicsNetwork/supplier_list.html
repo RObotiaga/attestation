@@ -1,0 +1,50 @@
+{% extends "ElectronicsNetwork/base.html" %}
+{% load static %}
+
+{% block title %}Главная страница - SubscribeSync{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% if user.is_authenticated %}
+            <div class="col-12 mb-4">
+                {# <a class="btn btn-outline-primary" href="{% url 'mailing_creation:create_supplier' %}">Создать рассылку</a> #}
+            </div>
+        {% endif %}
+        {% for supplier in suppliers %}
+            <div class="col-4 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">{{ supplier.name }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Тип: {{ supplier.get_type_display }}</p>
+                        <p class="card-text">Email: {{ supplier.email }}</p>
+                        <p class="card-text">
+                            Адрес: {{ supplier.city }}, {{ supplier.street }}, {{ supplier.house_number }}</p>
+                        <p class="card-text">Задолженность: {{ supplier.debt_to_supplier|default:"0" }}</p>
+                        <p class="card-text">Время создания: {{ supplier.creation_time }}</p>
+                        {% if supplier.type != 'factory' %}
+                            <p class="card-text">Поставщик:
+                                <a href="{% url 'ElectronicsNetwork:supplier_info' supplier.supplier.pk %}">{{ supplier.supplier.name|default:"0" }}</a>
+                            </p>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                            {#                            <a href="{% url 'mailing_creation:update_supplier' supplier.pk %}" class="btn btn-outline-primary btn-block">Изменить</a>#}
+                            <a href="{% url 'ElectronicsNetwork:supplier_info' supplier.pk %}"
+                               class="btn btn-primary btn-block">Подробнее</a>
+
+                        {% endif %}
+                        {% if user.is_superuser %}
+                            <a href="{% url 'ElectronicsNetwork:supplier_delete' supplier.id %}"
+                               class="btn btn-danger btn-block">Удалить</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        {% if user.is_superuser %}
+            <a href="{% url 'ElectronicsNetwork:supplier_create' %}"
+               class="btn btn-outline-primary btn-block">Создать</a>
+        {% endif %}
+    </div>
+{% endblock %}
