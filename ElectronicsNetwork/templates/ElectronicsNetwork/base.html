@@ -1,0 +1,32 @@
+<!doctype  html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>SubscribeSync</title>
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+    <nav class="ms-5 ml-auto">
+        <a class="p-2 btn btn-outline-primary" href="{% url 'ElectronicsNetwork:suppliers' %}">Поставщики</a>
+        {% if user.is_authenticated %}
+            <a class="p-2 btn btn-outline-primary" href="{% url 'users:profile' pk=user.pk %}">Профиль</a>
+            <a class="p-2 btn btn-outline-primary" href="{% url 'users:logout' %}">Выйти</a>
+            {% if user.is_superuser %}
+                <button class="p-2 btn btn-success" disabled>Администратор</button>
+            {% else %}
+                <button class="p-2 btn btn-warning" disabled>Пользователь</button>
+            {% endif %}
+        {% else %}
+            <a class="p-2 btn btn-outline-primary" href="{% url 'users:login' %}">Войти</a>
+            <a class="p-2 btn btn-outline-primary" href="{% url 'users:register' %}">Зарегистрироваться</a>
+        {% endif %}
+    </nav>
+</div>
+<div class="container">
+    {% block content %}
+
+    {% endblock %}
+</div>
+</body>
+</html>
